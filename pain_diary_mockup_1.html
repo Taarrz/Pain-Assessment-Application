@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Pain Diary - Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#eef3f8;--surface:#ffffff;--ink:#1a2b42;--ink-soft:#5a6b80;--ink-faint:#8da0b5;
+    --line:#dce5ef;--brand:#1f6fb2;--brand-dark:#155486;--brand-soft:#e8f1f9;
+    --green:#2e9e6b;--green-bg:#e6f6ee;--green-line:#bce5d1;
+    --yellow:#d9920a;--yellow-bg:#fdf3df;--yellow-line:#f3dca0;
+    --red:#d83a3a;--red-bg:#fcecec;--red-line:#f3c2c2;
+    --shadow:0 1px 3px rgba(26,43,66,.06),0 4px 16px rgba(26,43,66,.06);
+    --shadow-lg:0 8px 30px rgba(26,43,66,.12);--radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:0 0 40px;line-height:1.55}
+  .en{font-family:'IBM Plex Sans',sans-serif}
+  .topbar{background:var(--surface);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+  .logo{width:38px;height:38px;border-radius:10px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:700;font-size:18px;flex-shrink:0}
+  .topbar h1{font-size:17px;font-weight:600;letter-spacing:-.2px}
+  .topbar .sub{font-size:12px;color:var(--ink-faint);font-weight:400}
+  .demo-badge{margin-left:auto;font-size:11px;color:var(--brand-dark);background:var(--brand-soft);padding:5px 11px;border-radius:20px;font-weight:600;border:1px solid #cfe2f2}
+  .tabs{display:flex;gap:6px;background:var(--surface);padding:8px 14px;border-bottom:1px solid var(--line);position:sticky;top:67px;z-index:40;overflow-x:auto}
+  .tab{flex:1;min-width:120px;border:none;background:transparent;cursor:pointer;padding:11px 10px;border-radius:11px;font-family:inherit;font-size:14px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;gap:8px;transition:.18s;white-space:nowrap}
+  .tab:hover{background:var(--bg)}
+  .tab.active{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(31,111,178,.3)}
+  .tab .ic{font-size:17px}
+  .tab .dot{width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:none;place-items:center}
+  .tab.has-alert .dot{display:grid;animation:pop .4s}
+  @keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+  .wrap{max-width:760px;margin:0 auto;padding:22px 18px}
+  .page{display:none;animation:fade .3s ease}
+  .page.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .pad{padding:22px}
+  .page-intro{font-size:13px;color:var(--ink-soft);margin-bottom:16px;display:flex;gap:8px;align-items:flex-start}
+  .page-intro .ic{color:var(--brand);font-size:16px;margin-top:1px;flex-shrink:0}
+  /* patient profile */
+  .profile{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .avatar{width:52px;height:52px;border-radius:14px;background:var(--brand-soft);color:var(--brand-dark);display:grid;place-items:center;font-size:24px;flex-shrink:0}
+  .profile .pname{font-size:18px;font-weight:600}
+  .profile .pmeta{font-size:13px;color:var(--ink-soft);margin-top:1px}
+  .sec-title{font-size:15px;font-weight:600;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+  .sec-title .num{width:22px;height:22px;border-radius:7px;background:var(--brand);color:#fff;font-size:12px;display:grid;place-items:center;font-family:'IBM Plex Sans';flex-shrink:0}
+  .sec-title .opt{font-size:11px;font-weight:400;color:var(--ink-faint);margin-left:auto}
+  .ask{text-align:center;font-size:16px;font-weight:500;margin:6px 0 6px}
+  .face-wrap{display:flex;justify-content:center;margin:6px 0 14px}
+  .face{width:84px;height:84px;transition:.25s}
+  .scaleval{text-align:center;font-size:40px;font-weight:700;line-height:1;margin-bottom:2px}
+  .scalelabel{text-align:center;font-size:14px;font-weight:600;margin-bottom:18px}
+  .scale-row{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+  .sbtn{width:46px;height:46px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-family:'IBM Plex Sans';font-size:17px;font-weight:600;cursor:pointer;color:var(--ink-soft);transition:.15s}
+  .sbtn:hover{transform:translateY(-2px);border-color:var(--brand)}
+  .sbtn.sel{color:#fff;transform:translateY(-3px) scale(1.05);border-color:transparent;box-shadow:var(--shadow-lg)}
+  .legend{display:flex;justify-content:center;gap:14px;margin:12px 0 4px;font-size:12px;color:var(--ink-soft);flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .lz{width:11px;height:11px;border-radius:50%}
+  /* chips (quality + trigger) */
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{padding:10px 15px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;font-size:14px;color:var(--ink-soft);transition:.15s;font-weight:500}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  /* body map */
+  .bodymap-wrap{display:flex;flex-direction:column;align-items:center}
+  .bm-toggle{display:flex;gap:6px;margin-bottom:12px}
+  .bm-toggle button{padding:7px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink-soft);transition:.15s}
+  .bm-toggle button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .bm-svg{cursor:pointer;max-width:200px;width:100%;height:auto}
+  .bm-hint{font-size:12px;color:var(--ink-faint);margin-top:8px;text-align:center}
+  .bm-spot{fill:rgba(216,58,58,.55);stroke:var(--red);stroke-width:2;cursor:pointer}
+  .bm-region{fill:#cdd9e6;stroke:#fff;stroke-width:1.2;transition:.12s;cursor:pointer}
+  .bm-region:hover{fill:#a9bfd6}
+  .bm-region.sel{fill:var(--red)}
+  .selected-list{font-size:13px;color:var(--ink-soft);margin-top:10px;text-align:center;min-height:18px}
+  .send-btn{width:100%;padding:16px;border:none;border-radius:14px;background:var(--brand);color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:.18s;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:26px}
+  .send-btn:hover:not(:disabled){background:var(--brand-dark)}
+  .send-btn:disabled{opacity:.45;cursor:not-allowed}
+  .sent-ok{text-align:center;padding:30px 20px}
+  .sent-ok .check{width:64px;height:64px;border-radius:50%;background:var(--green-bg);color:var(--green);display:grid;place-items:center;font-size:34px;margin:0 auto 14px;border:2px solid var(--green-line)}
+  .sent-ok h3{font-size:19px;font-weight:600;margin-bottom:6px}
+  .sent-ok p{font-size:14px;color:var(--ink-soft)}
+  .link-btn{margin-top:16px;background:none;border:none;color:var(--brand);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline}
+  .nurse-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .nurse-head h2{font-size:19px;font-weight:600}
+  .filter-pills{display:flex;gap:6px}
+  .fpill{font-size:12px;padding:5px 12px;border-radius:18px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;color:var(--ink-soft);font-weight:500;transition:.15s}
+  .fpill.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .empty{text-align:center;padding:44px 20px;color:var(--ink-faint)}
+  .empty .ic{font-size:40px;opacity:.5;display:block;margin-bottom:10px}
+  .alert{display:flex;align-items:flex-start;gap:14px;padding:15px 16px;border-radius:14px;margin-bottom:11px;border:1px solid;border-left-width:5px;background:var(--surface);box-shadow:var(--shadow);animation:slidein .35s ease}
+  @keyframes slidein{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+  .alert.g{border-color:var(--green-line);border-left-color:var(--green);background:linear-gradient(90deg,var(--green-bg)0%,#fff 60%)}
+  .alert.y{border-color:var(--yellow-line);border-left-color:var(--yellow);background:linear-gradient(90deg,var(--yellow-bg)0%,#fff 60%)}
+  .alert.r{border-color:var(--red-line);border-left-color:var(--red);background:linear-gradient(90deg,var(--red-bg)0%,#fff 60%);animation:slidein .35s ease, pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 0 0 4px rgba(216,58,58,.12)}}
+  .score-badge{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;font-family:'IBM Plex Sans';font-size:23px;font-weight:700;color:#fff;flex-shrink:0;margin-top:2px}
+  .score-badge.g{background:var(--green)}.score-badge.y{background:var(--yellow)}.score-badge.r{background:var(--red)}
+  .alert-info{flex:1;min-width:0}
+  .alert-info .name{font-weight:600;font-size:15px}
+  .alert-info .meta{font-size:12px;color:var(--ink-soft);margin-top:1px}
+  .sev{font-size:11px;font-weight:600;padding:2px 9px;border-radius:12px;display:inline-block;margin-top:5px}
+  .sev.g{background:var(--green-bg);color:var(--green)}.sev.y{background:var(--yellow-bg);color:var(--yellow)}.sev.r{background:var(--red-bg);color:var(--red)}
+  .detail-tags{margin-top:7px;display:flex;flex-wrap:wrap;gap:5px}
+  .dtag{font-size:11px;background:#eef3f8;color:var(--ink-soft);padding:3px 9px;border-radius:8px;border:1px solid var(--line)}
+  .ack{border:none;background:var(--ink);color:#fff;font-family:inherit;font-size:13px;font-weight:600;padding:9px 15px;border-radius:11px;cursor:pointer;flex-shrink:0;transition:.15s;margin-top:2px}
+  .ack:hover{background:#0d1826}
+  .pt-select{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .pt-chip{padding:9px 15px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;color:var(--ink-soft);transition:.15s}
+  .pt-chip.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-dark)}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:18px}
+  .stat-box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;text-align:center;box-shadow:var(--shadow)}
+  .stat-box .v{font-size:28px;font-weight:700;font-family:'IBM Plex Sans';line-height:1}
+  .stat-box .l{font-size:12px;color:var(--ink-soft);margin-top:5px}
+  .chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:10px;flex-wrap:wrap}
+  .chart-title{font-size:14px;font-weight:600;padding:0 4px}
+  .chart-sub{font-size:12px;color:var(--ink-faint);margin-bottom:14px;padding:0 4px}
+  .day-nav{display:flex;align-items:center;gap:6px}
+  .day-nav button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px;color:var(--ink-soft);display:grid;place-items:center;transition:.15s;font-family:inherit}
+  .day-nav button:hover:not(:disabled){background:var(--brand-soft);border-color:var(--brand);color:var(--brand-dark)}
+  .day-nav button:disabled{opacity:.35;cursor:not-allowed}
+  .day-nav .daylabel{font-size:13px;font-weight:600;min-width:120px;text-align:center}
+  .view-toggle{display:flex;gap:6px;margin-bottom:14px;padding:0 4px}
+  .vbtn{flex:1;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink-soft);transition:.15s}
+  .vbtn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  svg.chart{width:100%;height:auto;display:block}
+  .glabel{font-size:11px;fill:var(--ink-faint);font-family:'IBM Plex Sans'}
+  .log-list{margin-top:8px}
+  .log-row{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line);font-size:14px}
+  .log-row:last-child{border:none}
+  .log-dot{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:700;color:#fff;font-family:'IBM Plex Sans';flex-shrink:0}
+  .log-time{color:var(--ink-faint);font-size:12px;margin-left:auto}
+  .log-empty{text-align:center;color:var(--ink-faint);font-size:13px;padding:20px}
+  .footer-note{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:26px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">AI</div>
+  <div><h1>AI Pain Diary</h1><div class="sub">ระบบประเมินและติดตามความปวดผู้ป่วยออร์โธปิดิกส์</div></div>
+  <div class="demo-badge">DEMO · ตัวอย่างนำเสนอ</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="patient"><span class="ic">🛏️</span> หน้าผู้ป่วย</button>
+  <button class="tab" data-tab="nurse"><span class="ic">🔔</span> หน้าพยาบาล <span class="dot" id="alertCount">0</span></button>
+  <button class="tab" data-tab="stats"><span class="ic">📈</span> สถิติ</button>
+</div>
+
+<div class="wrap">
+
+  <!-- PATIENT -->
+  <div class="page active" id="patient">
+    <div class="page-intro"><span class="ic">①</span><div>ผู้ป่วยกรอกแบบประเมินความปวดบนแท็บเล็ตข้างเตียง — ระบุระดับ ลักษณะ ตำแหน่ง และปัจจัยที่ทำให้ปวด เมื่อกดส่ง ระบบแจ้งเตือนไปหน้าพยาบาลทันที</div></div>
+    <div class="card pad" id="patientCard">
+
+      <!-- 1. profile -->
+      <div class="profile">
+        <div class="avatar">🧑</div>
+        <div>
+          <div class="pname">คุณสมหญิง ใจดี</div>
+          <div class="pmeta">อายุ 58 ปี · ห้อง 302 เตียง 2 · ผ่าตัดเปลี่ยนข้อเข่า</div>
+        </div>
+      </div>
+
+      <!-- 2.1 pain score -->
+      <div class="sec-title"><span class="num">1</span> ระดับความปวด <span class="en" style="font-weight:400;color:var(--ink-faint)">Pain Score (NRS 0–10)</span></div>
+      <div class="face-wrap"><div class="face" id="face"></div></div>
+      <div class="scaleval" id="scaleVal" style="color:var(--ink-faint)">—</div>
+      <div class="scalelabel" id="scaleLabel" style="color:var(--ink-faint)">เลือกคะแนนด้านล่าง</div>
+      <div class="scale-row" id="scaleRow"></div>
+      <div class="legend">
+        <span><i class="lz" style="background:var(--green)"></i> 0–3 ปวดน้อย</span>
+        <span><i class="lz" style="background:var(--yellow)"></i> 4–6 ปวดปานกลาง</span>
+        <span><i class="lz" style="background:var(--red)"></i> 7–10 ปวดมาก</span>
+      </div>
+
+      <!-- 2.2 quality -->
+      <div class="sec-title"><span class="num">2</span> ลักษณะความปวด <span class="opt">เลือกได้มากกว่า 1</span></div>
+      <div class="chip-row" id="qualityRow"></div>
+
+      <!-- 2.3 body map -->
+      <div class="sec-title"><span class="num">3</span> ตำแหน่งที่ปวด <span class="opt">แตะที่รูปเพื่อเลือก</span></div>
+      <div class="bodymap-wrap">
+        <div class="bm-toggle">
+          <button id="bmFront" class="on">ด้านหน้า</button>
+          <button id="bmBack">ด้านหลัง</button>
+        </div>
+        <div id="bodyMap"></div>
+        <div class="selected-list" id="bmSelected">ยังไม่ได้เลือกตำแหน่ง</div>
+      </div>
+
+      <!-- 3. trigger -->
+      <div class="sec-title"><span class="num">4</span> ปัจจัยที่ทำให้ปวด <span class="opt">เลือกได้มากกว่า 1</span></div>
+      <div class="chip-row" id="triggerRow"></div>
+
+      <button class="send-btn" id="sendBtn" disabled><span>📤</span> ส่งให้พยาบาล</button>
+    </div>
+  </div>
+
+  <!-- NURSE -->
+  <div class="page" id="nurse">
+    <div class="page-intro"><span class="ic">②</span><div>การแจ้งเตือนเด้งขึ้นที่นี่ แยกสีตามระดับความปวด พร้อมรายละเอียดลักษณะ ตำแหน่ง และปัจจัยกระตุ้น เคสปวดมาก (สีแดง) เรียงบนสุด</div></div>
+    <div class="nurse-head">
+      <h2>การแจ้งเตือน <span class="en" style="font-weight:400;font-size:14px;color:var(--ink-faint)">Pain Alerts</span></h2>
+      <div class="filter-pills">
+        <button class="fpill on" data-f="all">ทั้งหมด</button>
+        <button class="fpill" data-f="r">แดง</button>
+        <button class="fpill" data-f="y">เหลือง</button>
+      </div>
+    </div>
+    <div id="alertList"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="page" id="stats">
+    <div class="page-intro"><span class="ic">③</span><div>ระบบเก็บคะแนนความปวดทุกครั้งที่บันทึก ดูได้ทั้งรายชั่วโมงในแต่ละวัน และภาพรวมตลอดช่วงที่นอนโรงพยาบาล เพื่อใช้ปรึกษาแพทย์ปรับแผนการรักษา</div></div>
+    <div class="pt-select" id="ptSelect"></div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="v" id="stMax" style="color:var(--red)">—</div><div class="l">ปวดสูงสุด</div></div>
+      <div class="stat-box"><div class="v" id="stMin" style="color:var(--green)">—</div><div class="l">ปวดต่ำสุด</div></div>
+      <div class="stat-box"><div class="v" id="stCount">—</div><div class="l">ครั้งที่บันทึก</div></div>
+    </div>
+    <div class="card pad">
+      <div class="view-toggle">
+        <button class="vbtn on" id="vHour">รายชั่วโมง (รายวัน)</button>
+        <button class="vbtn" id="vAll">ภาพรวมทั้งช่วงที่นอน รพ.</button>
+      </div>
+      <div class="chart-head">
+        <div class="chart-title">แนวโน้มความปวด <span class="en" style="font-weight:400;color:var(--ink-faint)">Pain Score</span></div>
+        <div class="day-nav" id="dayNav">
+          <button id="prevDay">‹</button><span class="daylabel" id="dayLabel">วันนี้</span><button id="nextDay">›</button>
+        </div>
+      </div>
+      <div class="chart-sub" id="chartSub">แกนนอน = เวลาในแต่ละวัน (00:00–23:00 น.)</div>
+      <svg class="chart" id="trendChart" viewBox="0 0 600 240" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <div class="card pad" style="margin-top:14px">
+      <div class="chart-title" id="logTitle">บันทึกของวันนี้ <span class="en" style="font-weight:400;color:var(--ink-faint)">Log</span></div>
+      <div class="log-list" id="logList"></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    ⚠️ นี่คือ <b>ตัวอย่างจำลอง (mockup)</b> สำหรับนำเสนอแนวคิดเท่านั้น · ข้อมูลทั้งหมดเป็นข้อมูลสมมติ<br>
+    ในระบบใช้งานจริงต้องเชื่อมต่อ server และผ่านมาตรฐานความปลอดภัยข้อมูลสุขภาพ (PDPA)
+  </div>
+</div>
+
+<script>
+const zone=s=>s<=3?'g':s<=6?'y':'r';
+const zoneTH=s=>s<=3?'ปวดน้อย':s<=6?'ปวดปานกลาง':'ปวดมาก';
+const zoneColor={g:'#2e9e6b',y:'#d9920a',r:'#d83a3a'};
+
+function faceSVG(s){
+  const c=s===null?'#8da0b5':zoneColor[zone(s)];let mouth;
+  if(s===null)mouth='M30 64 Q48 64 66 64';else if(s<=3)mouth='M30 60 Q48 76 66 60';else if(s<=6)mouth='M30 66 L66 66';else mouth='M30 70 Q48 56 66 70';
+  return `<svg viewBox="0 0 96 96" width="84" height="84" xmlns="http://www.w3.org/2000/svg"><circle cx="48" cy="48" r="44" fill="${c}1a" stroke="${c}" stroke-width="3"/><circle cx="34" cy="40" r="4.5" fill="${c}"/><circle cx="62" cy="40" r="4.5" fill="${c}"/><path d="${mouth}" stroke="${c}" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+}
+
+/* selections state */
+let picked=null;
+let qualitySel=new Set();
+let triggerSel=new Set();
+let bodySel=new Set();
+let bmSide='front';
+
+const QUALITIES=['ปวดตื้อ','ปวดแปลบ/ไฟช้อต','ปวดบีบ','ปวดแสบร้อน','ปวดตุบ ๆ'];
+const TRIGGERS=['ปวดขณะพัก','ปวดขณะเคลื่อนไหว','ปวดขณะทำกายภาพบำบัด'];
+
+/* pain scale */
+const scaleRow=document.getElementById('scaleRow');
+for(let i=0;i<=10;i++){const b=document.createElement('button');b.className='sbtn';b.textContent=i;b.onclick=()=>pick(i,b);scaleRow.appendChild(b);}
+document.getElementById('face').innerHTML=faceSVG(null);
+function pick(i,btn){
+  picked=i;
+  document.querySelectorAll('.sbtn').forEach(x=>{x.classList.remove('sel');x.style.background=''});
+  btn.classList.add('sel');btn.style.background=zoneColor[zone(i)];
+  document.getElementById('face').innerHTML=faceSVG(i);
+  const sv=document.getElementById('scaleVal'),sl=document.getElementById('scaleLabel');
+  sv.textContent=i+' / 10';sv.style.color=zoneColor[zone(i)];sl.textContent=zoneTH(i);sl.style.color=zoneColor[zone(i)];
+  updateSend();
+}
+
+/* quality + trigger chips */
+function buildChips(arr,container,set){
+  arr.forEach(label=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=label;
+    b.onclick=()=>{if(set.has(label)){set.delete(label);b.classList.remove('on')}else{set.add(label);b.classList.add('on')}};
+    container.appendChild(b);
+  });
+}
+buildChips(QUALITIES,document.getElementById('qualityRow'),qualitySel);
+buildChips(TRIGGERS,document.getElementById('triggerRow'),triggerSel);
+
+/* body map */
+const BODY={
+  front:[
+    {id:'ศีรษะ',cx:60,cy:24,r:13},
+    {id:'ไหล่ซ้าย',cx:38,cy:56,r:9},{id:'ไหล่ขวา',cx:82,cy:56,r:9},
+    {id:'หน้าอก',cx:60,cy:66,r:11},{id:'ท้อง',cx:60,cy:92,r:11},
+    {id:'แขนซ้าย',cx:30,cy:90,r:8},{id:'แขนขวา',cx:90,cy:90,r:8},
+    {id:'มือซ้าย',cx:24,cy:120,r:7},{id:'มือขวา',cx:96,cy:120,r:7},
+    {id:'สะโพก',cx:60,cy:118,r:11},
+    {id:'เข่าซ้าย',cx:48,cy:158,r:9},{id:'เข่าขวา',cx:72,cy:158,r:9},
+    {id:'เท้าซ้าย',cx:48,cy:196,r:8},{id:'เท้าขวา',cx:72,cy:196,r:8},
+  ],
+  back:[
+    {id:'ท้ายทอย',cx:60,cy:24,r:13},
+    {id:'สะบักซ้าย',cx:46,cy:60,r:9},{id:'สะบักขวา',cx:74,cy:60,r:9},
+    {id:'หลังส่วนบน',cx:60,cy:72,r:11},{id:'หลังส่วนล่าง',cx:60,cy:98,r:11},
+    {id:'ก้น',cx:60,cy:120,r:12},
+    {id:'ต้นขาหลังซ้าย',cx:50,cy:148,r:9},{id:'ต้นขาหลังขวา',cx:70,cy:148,r:9},
+    {id:'น่องซ้าย',cx:50,cy:180,r:8},{id:'น่องขวา',cx:70,cy:180,r:8},
+    {id:'ส้นเท้าซ้าย',cx:50,cy:204,r:7},{id:'ส้นเท้าขวา',cx:70,cy:204,r:7},
+  ]
+};
+/* simple human silhouette path */
+function silhouette(){
+  return `<path d="M60 8 C68 8 73 14 73 22 C73 28 70 32 66 34 L74 40 C84 42 92 50 92 64 L96 110 C97 124 90 126 88 116 L84 70 L82 118 C82 120 81 130 80 138 L77 200 C77 208 67 208 67 200 L64 140 L60 140 L56 140 L53 200 C53 208 43 208 43 200 L40 138 C39 130 38 120 38 118 L36 70 L32 116 C30 126 23 124 24 110 L28 64 C28 50 36 42 46 40 L54 34 C50 32 47 28 47 22 C47 14 52 8 60 8 Z" fill="#e8eef5" stroke="#cdd9e6" stroke-width="1.5"/>`;
+}
+function renderBody(){
+  const pts=BODY[bmSide];
+  let svg=`<svg class="bm-svg" viewBox="0 0 120 216" xmlns="http://www.w3.org/2000/svg">${silhouette()}`;
+  pts.forEach(p=>{
+    const sel=bodySel.has(p.id);
+    svg+=`<circle class="bm-region${sel?' sel':''}" data-id="${p.id}" cx="${p.cx}" cy="${p.cy}" r="${p.r}"><title>${p.id}</title></circle>`;
+  });
+  svg+=`</svg>`;
+  document.getElementById('bodyMap').innerHTML=svg;
+  document.querySelectorAll('.bm-region').forEach(c=>{
+    c.onclick=()=>{const id=c.dataset.id;if(bodySel.has(id))bodySel.delete(id);else bodySel.add(id);renderBody();updateBmLabel();};
+  });
+}
+function updateBmLabel(){
+  const el=document.getElementById('bmSelected');
+  el.textContent=bodySel.size?'เลือกแล้ว: '+[...bodySel].join(', '):'ยังไม่ได้เลือกตำแหน่ง';
+}
+document.getElementById('bmFront').onclick=()=>{bmSide='front';document.getElementById('bmFront').classList.add('on');document.getElementById('bmBack').classList.remove('on');renderBody();};
+document.getElementById('bmBack').onclick=()=>{bmSide='back';document.getElementById('bmBack').classList.add('on');document.getElementById('bmFront').classList.remove('on');renderBody();};
+renderBody();
+
+function updateSend(){document.getElementById('sendBtn').disabled=(picked===null);}
+
+/* alerts */
+let alerts=[
+  {name:'คุณวิชัย มั่นคง',age:67,room:'305 · เตียง 1',score:9,time:'14:52',quality:['ปวดแปลบ/ไฟช้อต','ปวดตุบ ๆ'],body:['เข่าขวา','ต้นขาหลังขวา'],trigger:['ปวดขณะเคลื่อนไหว'],ack:false},
+  {name:'คุณมาลี สุขใจ',age:54,room:'301 · เตียง 3',score:6,time:'14:45',quality:['ปวดตื้อ'],body:['หลังส่วนล่าง'],trigger:['ปวดขณะทำกายภาพบำบัด'],ack:false},
+  {name:'คุณประสิทธิ์ ดีงาม',age:71,room:'308 · เตียง 2',score:2,time:'14:30',quality:['ปวดตื้อ'],body:['สะโพก'],trigger:['ปวดขณะพัก'],ack:false},
+];
+let filter='all';
+function tagBlock(a){
+  let t='';
+  if(a.quality&&a.quality.length)t+=a.quality.map(x=>`<span class="dtag">🩹 ${x}</span>`).join('');
+  if(a.body&&a.body.length)t+=a.body.map(x=>`<span class="dtag">📍 ${x}</span>`).join('');
+  if(a.trigger&&a.trigger.length)t+=a.trigger.map(x=>`<span class="dtag">⚡ ${x}</span>`).join('');
+  return t?`<div class="detail-tags">${t}</div>`:'';
+}
+function renderAlerts(){
+  const list=document.getElementById('alertList');
+  const active=alerts.filter(a=>!a.ack);
+  let shown=active.filter(a=>filter==='all'||zone(a.score)===filter);
+  shown.sort((x,y)=>y.score-x.score);
+  const tab=document.querySelector('[data-tab="nurse"]');const dot=document.getElementById('alertCount');
+  if(active.length>0){tab.classList.add('has-alert');dot.textContent=active.length}else tab.classList.remove('has-alert');
+  if(shown.length===0){list.innerHTML='<div class="empty"><span class="ic">✓</span>ไม่มีการแจ้งเตือนค้างอยู่<br><span style="font-size:13px">ผู้ป่วยทุกคนได้รับการดูแลแล้ว</span></div>';return;}
+  list.innerHTML=shown.map(a=>{
+    const z=zone(a.score);
+    const rec=z==='r'?'ให้ยาแก้ปวดแรง (เช่น opioid PRN) + รายงานแพทย์':z==='y'?'ให้ยาแก้ปวดระดับกลาง (PRN) ตามแผนการรักษา':'เฝ้าสังเกตอาการ · ยังไม่ต้องให้ยา';
+    return `<div class="alert ${z}"><div class="score-badge ${z}">${a.score}</div>
+      <div class="alert-info"><div class="name">${a.name} <span style="font-weight:400;color:var(--ink-faint);font-size:13px">· อายุ ${a.age} ปี</span></div>
+      <div class="meta">ห้อง ${a.room} · เวลา ${a.time} น.</div>
+      <span class="sev ${z}">${zoneTH(a.score)} (${a.score}/10)</span>
+      ${tagBlock(a)}
+      <div class="meta" style="margin-top:7px">💊 ${rec}</div></div>
+      <button class="ack" onclick="ackAlert('${a.name}','${a.time}')">รับเรื่อง</button></div>`;
+  }).join('');
+}
+function ackAlert(name,time){const a=alerts.find(x=>x.name===name&&x.time===time);if(a)a.ack=true;renderAlerts();}
+document.querySelectorAll('.fpill').forEach(p=>{p.onclick=()=>{document.querySelectorAll('.fpill').forEach(x=>x.classList.remove('on'));p.classList.add('on');filter=p.dataset.f;renderAlerts()};});
+
+/* send */
+document.getElementById('sendBtn').onclick=function(){
+  if(picked===null)return;
+  const now=new Date();const hh=String(now.getHours()).padStart(2,'0'),mm=String(now.getMinutes()).padStart(2,'0');
+  alerts.unshift({name:'คุณสมหญิง ใจดี',age:58,room:'302 · เตียง 2',score:picked,time:hh+':'+mm,quality:[...qualitySel],body:[...bodySel],trigger:[...triggerSel],ack:false});
+  patients['somying'].days[patients['somying'].days.length-1].logs.push({h:now.getHours(),score:picked,time:hh+':'+mm});
+  renderAlerts();
+  document.getElementById('patientCard').innerHTML=`<div class="sent-ok"><div class="check">✓</div>
+    <h3>ส่งข้อมูลเรียบร้อยแล้ว</h3>
+    <p>พยาบาลได้รับการแจ้งเตือนระดับ <b style="color:${zoneColor[zone(picked)]}">${zoneTH(picked)} (${picked}/10)</b><br>กรุณารอสักครู่ พยาบาลกำลังมาดูแลคุณ</p>
+    <button class="link-btn" onclick="location.reload()">← ทำแบบประเมินอีกครั้ง</button></div>`;
+};
+
+/* stats */
+function mk(h,score){return {h,score,time:String(h).padStart(2,'0')+':00'};}
+const patients={
+  somying:{name:'คุณสมหญิง ใจดี',room:'302',days:[
+    {label:'วันที่ 1 (วันผ่าตัด)',logs:[mk(6,8),mk(9,8),mk(12,7),mk(15,9),mk(18,7),mk(21,6)]},
+    {label:'วันที่ 2',logs:[mk(6,7),mk(9,6),mk(12,6),mk(15,5),mk(18,5),mk(22,4)]},
+    {label:'วันที่ 3',logs:[mk(7,5),mk(10,5),mk(13,4),mk(16,4),mk(20,3)]},
+    {label:'วันนี้ (วันที่ 4)',logs:[mk(8,4),mk(12,3)]},
+  ]},
+  wichai:{name:'คุณวิชัย มั่นคง',room:'305',days:[
+    {label:'วันที่ 1',logs:[mk(6,5),mk(10,6),mk(14,6),mk(18,7),mk(22,7)]},
+    {label:'วันที่ 2',logs:[mk(6,7),mk(10,8),mk(14,8),mk(18,8),mk(22,9)]},
+    {label:'วันนี้ (วันที่ 3)',logs:[mk(7,8),mk(9,8),mk(13,9),mk(14,9)]},
+  ]},
+  malee:{name:'คุณมาลี สุขใจ',room:'301',days:[
+    {label:'วันที่ 1',logs:[mk(6,6),mk(12,6),mk(18,5),mk(22,6)]},
+    {label:'วันนี้ (วันที่ 2)',logs:[mk(10,6),mk(14,6)]},
+  ]},
+};
+let curPt='somying',statMode='hour';
+let curDayIdx={};Object.keys(patients).forEach(k=>curDayIdx[k]=patients[k].days.length-1);
+const ptSel=document.getElementById('ptSelect');
+Object.keys(patients).forEach(k=>{
+  const b=document.createElement('button');b.className='pt-chip'+(k===curPt?' on':'');b.textContent=patients[k].name+' · ห้อง '+patients[k].room;
+  b.onclick=()=>{curPt=k;document.querySelectorAll('.pt-chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderStats()};
+  ptSel.appendChild(b);
+});
+document.getElementById('vHour').onclick=()=>{statMode='hour';document.getElementById('vHour').classList.add('on');document.getElementById('vAll').classList.remove('on');renderStats()};
+document.getElementById('vAll').onclick=()=>{statMode='all';document.getElementById('vAll').classList.add('on');document.getElementById('vHour').classList.remove('on');renderStats()};
+document.getElementById('prevDay').onclick=()=>{if(curDayIdx[curPt]>0){curDayIdx[curPt]--;renderStats()}};
+document.getElementById('nextDay').onclick=()=>{if(curDayIdx[curPt]<patients[curPt].days.length-1){curDayIdx[curPt]++;renderStats()}};
+function allScores(p){let s=[];p.days.forEach(d=>d.logs.forEach(l=>s.push(l.score)));return s;}
+function renderStats(){
+  const p=patients[curPt];const dayNav=document.getElementById('dayNav');let scores;
+  if(statMode==='hour'){
+    dayNav.style.display='flex';const di=curDayIdx[curPt];const day=p.days[di];
+    document.getElementById('dayLabel').textContent=day.label;
+    document.getElementById('prevDay').disabled=(di===0);document.getElementById('nextDay').disabled=(di===p.days.length-1);
+    document.getElementById('chartSub').textContent='แกนนอน = เวลาในวันนั้น (00:00–23:00 น.)';
+    scores=day.logs.map(l=>l.score);drawHourChart(day.logs);
+    document.getElementById('logTitle').innerHTML='บันทึก'+day.label+' <span class="en" style="font-weight:400;color:var(--ink-faint)">Log</span>';
+    renderLog(day.logs);
+  }else{
+    dayNav.style.display='none';
+    document.getElementById('chartSub').textContent='แกนนอน = แต่ละวันที่นอนโรงพยาบาล (เฉลี่ยรายวัน)';
+    scores=allScores(p);drawAllChart(p.days);
+    document.getElementById('logTitle').innerHTML='สรุปรายวัน <span class="en" style="font-weight:400;color:var(--ink-faint)">Daily Summary</span>';
+    renderDaySummary(p.days);
+  }
+  document.getElementById('stMax').textContent=scores.length?Math.max(...scores):'—';
+  document.getElementById('stMax').style.color=scores.length?zoneColor[zone(Math.max(...scores))]:'var(--ink-faint)';
+  document.getElementById('stMin').textContent=scores.length?Math.min(...scores):'—';
+  document.getElementById('stMin').style.color=scores.length?zoneColor[zone(Math.min(...scores))]:'var(--ink-faint)';
+  document.getElementById('stCount').textContent=scores.length;
+}
+function chartFrame(){
+  const W=600,H=240,pl=36,pr=16,pt=16,pb=34,cw=W-pl-pr,ch=H-pt-pb;const y=v=>pt+ch-(v/10)*ch;let svg='';
+  for(let g=0;g<=10;g+=2){const gy=y(g);svg+=`<line x1="${pl}" y1="${gy}" x2="${W-pr}" y2="${gy}" stroke="#dce5ef" stroke-width="1"/><text class="glabel" x="${pl-8}" y="${gy+4}" text-anchor="end">${g}</text>`;}
+  svg+=`<rect x="${pl}" y="${y(10)}" width="${cw}" height="${y(6)-y(10)}" fill="#d83a3a" opacity="0.05"/>`;
+  svg+=`<rect x="${pl}" y="${y(6)}" width="${cw}" height="${y(3)-y(6)}" fill="#d9920a" opacity="0.05"/>`;
+  svg+=`<rect x="${pl}" y="${y(3)}" width="${cw}" height="${y(0)-y(3)}" fill="#2e9e6b" opacity="0.05"/>`;
+  return {W,H,pl,pr,pt,pb,cw,ch,y,svg};
+}
+function drawHourChart(logs){
+  const f=chartFrame();const x=h=>f.pl+(f.cw/23)*h;let svg=f.svg;
+  [0,6,12,18,23].forEach(h=>{svg+=`<text class="glabel" x="${x(h)}" y="${f.H-12}" text-anchor="middle">${String(h).padStart(2,'0')}:00</text>`;});
+  if(logs.length===0){document.getElementById('trendChart').innerHTML=svg+`<text x="300" y="120" text-anchor="middle" class="glabel" style="font-size:13px">ยังไม่มีข้อมูลในวันนี้</text>`;return;}
+  let d='';logs.forEach((l,i)=>{d+=(i?'L':'M')+x(l.h)+' '+f.y(l.score)+' ';});
+  if(logs.length>1){svg+=`<path d="${d}L${x(logs[logs.length-1].h)} ${f.y(0)} L${x(logs[0].h)} ${f.y(0)} Z" fill="#1f6fb2" opacity="0.07"/>`;svg+=`<path d="${d}" fill="none" stroke="#1f6fb2" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;}
+  logs.forEach(l=>{svg+=`<circle cx="${x(l.h)}" cy="${f.y(l.score)}" r="5" fill="#fff" stroke="${zoneColor[zone(l.score)]}" stroke-width="3"/>`;});
+  document.getElementById('trendChart').innerHTML=svg;
+}
+function drawAllChart(days){
+  const f=chartFrame();const avgs=days.map(d=>{const s=d.logs.map(l=>l.score);return s.reduce((a,b)=>a+b,0)/s.length;});
+  const x=i=>days.length===1?f.pl+f.cw/2:f.pl+(f.cw/(days.length-1))*i;let svg=f.svg;
+  days.forEach((d,i)=>{svg+=`<text class="glabel" x="${x(i)}" y="${f.H-12}" text-anchor="middle">วันที่ ${i+1}</text>`;});
+  let d='';avgs.forEach((v,i)=>{d+=(i?'L':'M')+x(i)+' '+f.y(v)+' ';});
+  if(avgs.length>1){svg+=`<path d="${d}L${x(avgs.length-1)} ${f.y(0)} L${x(0)} ${f.y(0)} Z" fill="#1f6fb2" opacity="0.07"/>`;svg+=`<path d="${d}" fill="none" stroke="#1f6fb2" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;}
+  avgs.forEach((v,i)=>{svg+=`<circle cx="${x(i)}" cy="${f.y(v)}" r="5" fill="#fff" stroke="${zoneColor[zone(Math.round(v))]}" stroke-width="3"/>`;});
+  document.getElementById('trendChart').innerHTML=svg;
+}
+function renderLog(logs){
+  const ll=document.getElementById('logList');
+  if(logs.length===0){ll.innerHTML='<div class="log-empty">ยังไม่มีบันทึกในวันนี้</div>';return;}
+  ll.innerHTML=logs.slice().reverse().map(l=>{const z=zone(l.score);return `<div class="log-row"><div class="log-dot" style="background:${zoneColor[z]}">${l.score}</div><div><div style="font-weight:500">${zoneTH(l.score)}</div><div style="font-size:12px;color:var(--ink-faint)">Pain Score ${l.score}/10</div></div><div class="log-time">${l.time} น.</div></div>`;}).join('');
+}
+function renderDaySummary(days){
+  const ll=document.getElementById('logList');
+  ll.innerHTML=days.map((d,i)=>{const s=d.logs.map(l=>l.score);const mx=Math.max(...s),mn=Math.min(...s);return `<div class="log-row"><div class="log-dot" style="background:${zoneColor[zone(mx)]}">${mx}</div><div><div style="font-weight:500">${d.label}</div><div style="font-size:12px;color:var(--ink-faint)">สูงสุด ${mx} · ต่ำสุด ${mn} · บันทึก ${s.length} ครั้ง</div></div></div>`;}).join('');
+}
+
+document.querySelectorAll('.tab').forEach(t=>{t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.tab).classList.add('active');if(t.dataset.tab==='stats')renderStats();};});
+renderAlerts();
+</script>
+</body>
+</html>
