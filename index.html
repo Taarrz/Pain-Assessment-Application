@@ -53,12 +53,12 @@
   .scaleval{text-align:center;font-size:40px;font-weight:700;line-height:1;margin-bottom:2px}
   .scalelabel{text-align:center;font-size:14px;font-weight:600;margin-bottom:18px}
   .scale-row{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
-  .sbtn{width:46px;height:46px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-family:'IBM Plex Sans';font-size:17px;font-weight:600;cursor:pointer;color:var(--ink-soft);transition:.15s}
-  .sbtn:hover{transform:translateY(-2px);border-color:var(--brand)}
-  .sbtn.sel{color:#fff;transform:translateY(-3px) scale(1.05);border-color:transparent;box-shadow:var(--shadow-lg)}
-  .legend{display:flex;justify-content:center;gap:14px;margin:12px 0 4px;font-size:12px;color:var(--ink-soft);flex-wrap:wrap}
+  .sbtn{width:48px;height:48px;border-radius:12px;border:2.5px solid var(--line);background:var(--surface);font-family:'IBM Plex Sans';font-size:18px;font-weight:700;cursor:pointer;color:var(--ink-soft);transition:.15s}
+  .sbtn:hover{transform:translateY(-2px)}
+  .sbtn.sel{transform:translateY(-4px) scale(1.18);border-width:3.5px!important;box-shadow:0 6px 18px rgba(0,0,0,.22);font-weight:700;z-index:2;position:relative}
+  .legend{display:flex;justify-content:center;gap:10px 16px;margin:14px 0 4px;font-size:12.5px;color:var(--ink);flex-wrap:wrap;background:#f5f8fb;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:500}
   .legend span{display:flex;align-items:center;gap:6px}
-  .lz{width:11px;height:11px;border-radius:50%}
+  .lz{width:14px;height:14px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(0,0,0,.05)}
   /* chips (quality + trigger) */
   .chip-row{display:flex;flex-wrap:wrap;gap:8px}
   .chip{padding:10px 15px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;font-size:14px;color:var(--ink-soft);transition:.15s;font-weight:500}
@@ -66,9 +66,10 @@
   .chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
   /* body map */
   .bodymap-wrap{display:flex;flex-direction:column;align-items:center}
-  .bm-toggle{display:flex;gap:6px;margin-bottom:12px}
-  .bm-toggle button{padding:7px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink-soft);transition:.15s}
-  .bm-toggle button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .bm-switch-label{font-size:12px;color:var(--brand-dark);font-weight:600;margin-bottom:8px}
+  .bm-toggle{display:flex;gap:8px;margin-bottom:14px;background:var(--brand-soft);padding:5px;border-radius:13px;border:1px solid #cfe2f2}
+  .bm-toggle button{padding:10px 22px;border-radius:10px;border:none;background:transparent;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:var(--brand-dark);transition:.15s}
+  .bm-toggle button.on{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(31,111,178,.3)}
   .bm-svg{cursor:pointer;max-width:200px;width:100%;height:auto}
   .bm-hint{font-size:12px;color:var(--ink-faint);margin-top:8px;text-align:center}
   .bm-spot{fill:rgba(216,58,58,.55);stroke:var(--red);stroke-width:2;cursor:pointer}
@@ -174,9 +175,11 @@
       <div class="scalelabel" id="scaleLabel" style="color:var(--ink-faint)">เลือกคะแนนด้านล่าง</div>
       <div class="scale-row" id="scaleRow"></div>
       <div class="legend">
-        <span><i class="lz" style="background:var(--green)"></i> 0–3 ปวดน้อย</span>
-        <span><i class="lz" style="background:var(--yellow)"></i> 4–6 ปวดปานกลาง</span>
-        <span><i class="lz" style="background:var(--red)"></i> 7–10 ปวดมาก</span>
+        <span><i class="lz" style="background:#2e9e6b"></i> 0 ไม่ปวด</span>
+        <span><i class="lz" style="background:#86b817"></i> 1–3 เล็กน้อย</span>
+        <span><i class="lz" style="background:#d9920a"></i> 4–6 ปานกลาง</span>
+        <span><i class="lz" style="background:#e8631a"></i> 7–9 ปวดมาก</span>
+        <span><i class="lz" style="background:#d11f1f"></i> 10 มากที่สุด</span>
       </div>
 
       <!-- 2.2 quality -->
@@ -186,9 +189,10 @@
       <!-- 2.3 body map -->
       <div class="sec-title"><span class="num">3</span> ตำแหน่งที่ปวด <span class="opt">แตะที่รูปเพื่อเลือก</span></div>
       <div class="bodymap-wrap">
+        <div class="bm-switch-label">👆 แตะเลือกมุมมอง</div>
         <div class="bm-toggle">
-          <button id="bmFront" class="on">ด้านหน้า</button>
-          <button id="bmBack">ด้านหลัง</button>
+          <button id="bmFront" class="on">🧍 ด้านหน้า</button>
+          <button id="bmBack">🧍‍♂️ ด้านหลัง</button>
         </div>
         <div id="bodyMap"></div>
         <div class="selected-list" id="bmSelected">ยังไม่ได้เลือกตำแหน่ง</div>
@@ -252,13 +256,22 @@
 </div>
 
 <script>
-const zone=s=>s<=3?'g':s<=6?'y':'r';
-const zoneTH=s=>s<=3?'ปวดน้อย':s<=6?'ปวดปานกลาง':'ปวดมาก';
-const zoneColor={g:'#2e9e6b',y:'#d9920a',r:'#d83a3a'};
+/* 5 ระดับ: 0 ไม่ปวด / 1-3 เล็กน้อย / 4-6 ปานกลาง / 7-9 มาก / 10 มากที่สุด */
+function zone(s){if(s===0)return'z0';if(s<=3)return'z1';if(s<=6)return'z2';if(s<=9)return'z3';return'z4';}
+function zoneTH(s){if(s===0)return'ไม่ปวดเลย';if(s<=3)return'ปวดเล็กน้อย';if(s<=6)return'ปวดปานกลาง';if(s<=9)return'ปวดมาก';return'ปวดมากที่สุด';}
+const zoneColor={z0:'#2e9e6b',z1:'#86b817',z2:'#d9920a',z3:'#e8631a',z4:'#d11f1f'};
+/* กลุ่มความเร่งด่วนสำหรับพยาบาล (เขียว/เหลือง/แดง) — รวมจาก 5 ระดับ */
+function sev(s){if(s<=3)return'g';if(s<=6)return'y';return'r';}
+const sevColor={g:'#2e9e6b',y:'#d9920a',r:'#d11f1f'};
 
 function faceSVG(s){
   const c=s===null?'#8da0b5':zoneColor[zone(s)];let mouth;
-  if(s===null)mouth='M30 64 Q48 64 66 64';else if(s<=3)mouth='M30 60 Q48 76 66 60';else if(s<=6)mouth='M30 66 L66 66';else mouth='M30 70 Q48 56 66 70';
+  if(s===null)mouth='M30 64 Q48 64 66 64';
+  else if(s===0)mouth='M30 60 Q48 78 66 60';
+  else if(s<=3)mouth='M30 62 Q48 72 66 62';
+  else if(s<=6)mouth='M30 66 L66 66';
+  else if(s<=9)mouth='M30 70 Q48 60 66 70';
+  else mouth='M30 72 Q48 54 66 72';
   return `<svg viewBox="0 0 96 96" width="84" height="84" xmlns="http://www.w3.org/2000/svg"><circle cx="48" cy="48" r="44" fill="${c}1a" stroke="${c}" stroke-width="3"/><circle cx="34" cy="40" r="4.5" fill="${c}"/><circle cx="62" cy="40" r="4.5" fill="${c}"/><path d="${mouth}" stroke="${c}" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
 }
 
@@ -272,17 +285,24 @@ let bmSide='front';
 const QUALITIES=['ปวดตื้อ','ปวดแปลบ/ไฟช้อต','ปวดบีบ','ปวดแสบร้อน','ปวดตุบ ๆ'];
 const TRIGGERS=['ปวดขณะพัก','ปวดขณะเคลื่อนไหว','ปวดขณะทำกายภาพบำบัด'];
 
-/* pain scale */
+/* pain scale — ปุ่มติดสีตามระดับตั้งแต่แรก เพื่อให้ผู้สูงอายุแยกง่าย */
 const scaleRow=document.getElementById('scaleRow');
-for(let i=0;i<=10;i++){const b=document.createElement('button');b.className='sbtn';b.textContent=i;b.onclick=()=>pick(i,b);scaleRow.appendChild(b);}
+function tint(hex,a){return hex+a;} // hex + alpha suffix
+for(let i=0;i<=10;i++){
+  const b=document.createElement('button');b.className='sbtn';b.textContent=i;
+  const col=zoneColor[zone(i)];
+  b.style.borderColor=col;b.style.color=col;b.style.background=col+'1f';
+  b.dataset.col=col;
+  b.onclick=()=>pick(i,b);scaleRow.appendChild(b);
+}
 document.getElementById('face').innerHTML=faceSVG(null);
 function pick(i,btn){
-  picked=i;
-  document.querySelectorAll('.sbtn').forEach(x=>{x.classList.remove('sel');x.style.background=''});
-  btn.classList.add('sel');btn.style.background=zoneColor[zone(i)];
+  picked=i;const col=zoneColor[zone(i)];
+  document.querySelectorAll('.sbtn').forEach(x=>{x.classList.remove('sel');const c=x.dataset.col;x.style.background=c+'1f';x.style.color=c;x.style.borderColor=c;});
+  btn.classList.add('sel');btn.style.background=col;btn.style.color='#fff';btn.style.borderColor=col;
   document.getElementById('face').innerHTML=faceSVG(i);
   const sv=document.getElementById('scaleVal'),sl=document.getElementById('scaleLabel');
-  sv.textContent=i+' / 10';sv.style.color=zoneColor[zone(i)];sl.textContent=zoneTH(i);sl.style.color=zoneColor[zone(i)];
+  sv.textContent=i+' / 10';sv.style.color=col;sl.textContent=zoneTH(i);sl.style.color=col;
   updateSend();
 }
 
@@ -363,15 +383,15 @@ function tagBlock(a){
 function renderAlerts(){
   const list=document.getElementById('alertList');
   const active=alerts.filter(a=>!a.ack);
-  let shown=active.filter(a=>filter==='all'||zone(a.score)===filter);
+  let shown=active.filter(a=>filter==='all'||sev(a.score)===filter);
   shown.sort((x,y)=>y.score-x.score);
   const tab=document.querySelector('[data-tab="nurse"]');const dot=document.getElementById('alertCount');
   if(active.length>0){tab.classList.add('has-alert');dot.textContent=active.length}else tab.classList.remove('has-alert');
   if(shown.length===0){list.innerHTML='<div class="empty"><span class="ic">✓</span>ไม่มีการแจ้งเตือนค้างอยู่<br><span style="font-size:13px">ผู้ป่วยทุกคนได้รับการดูแลแล้ว</span></div>';return;}
   list.innerHTML=shown.map(a=>{
-    const z=zone(a.score);
+    const z=sev(a.score);const col=zoneColor[zone(a.score)];
     const rec=z==='r'?'ให้ยาแก้ปวดแรง (เช่น opioid PRN) + รายงานแพทย์':z==='y'?'ให้ยาแก้ปวดระดับกลาง (PRN) ตามแผนการรักษา':'เฝ้าสังเกตอาการ · ยังไม่ต้องให้ยา';
-    return `<div class="alert ${z}"><div class="score-badge ${z}">${a.score}</div>
+    return `<div class="alert ${z}"><div class="score-badge" style="background:${col}">${a.score}</div>
       <div class="alert-info"><div class="name">${a.name} <span style="font-weight:400;color:var(--ink-faint);font-size:13px">· อายุ ${a.age} ปี</span></div>
       <div class="meta">ห้อง ${a.room} · เวลา ${a.time} น.</div>
       <span class="sev ${z}">${zoneTH(a.score)} (${a.score}/10)</span>
